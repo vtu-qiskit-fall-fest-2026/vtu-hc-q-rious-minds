@@ -307,6 +307,6 @@ Released under the [MIT License](LICENSE). See `LICENSE` for details.
 **Q-Rious Minds** · Team ID `VTU-QFF-HC-0103` · Tier `Offline`
 · Built with ⚛️ Qiskit for the VTU-QFF Hackathon
 
-[⬆ Back to Top](#Q-Rious Minds)
+[⬆ Back to Top](#q-rious-minds)
 
 </div>
