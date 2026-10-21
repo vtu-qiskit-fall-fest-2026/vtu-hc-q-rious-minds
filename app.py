@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify
-from energy_data import get_energy_data
+from energydata import get_energy_data
 
 app = Flask(__name__)
 
