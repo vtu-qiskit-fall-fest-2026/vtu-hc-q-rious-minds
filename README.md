@@ -46,9 +46,8 @@
 
 | # | Name | GitHub Username | Role |
 | :-- | :--- | :--- | :--- |
-| 1 | _Add your name_ | _your-github-username_ | _Team Lead_ |
-| 2 | _Add your name_ | _your-github-username_ | _Developer_ |
-| 3 | _Add your name_ | _your-github-username_ | _Developer_ |
+| 1 | Sahana UP |sahanaup13  | _Team Lead_ |
+| 2 | Thrisha SP | thrishaspatil9-hash | _Developer_ |
 
 <!--
 Optional: add a plain list instead of the table above.
@@ -66,48 +65,73 @@ who experiences it, and why does it matter. Link to the official problem
 statement from the brief if one applies.
 -->
 
-**Problem:** _Describe the problem in 2–3 sentences._
+**Problem:** University campuses often waste excess solar energy and rely on expensive grid electricity because battery charging and discharging schedules are not optimized according to hourly solar generation, campus demand, and electricity prices.
+The challenge is to develop a quantum-assisted optimization system using QAOA to determine the most cost-effective battery schedule while meeting campus electricity demand and reducing grid dependence and carbon emissions.
 
-**Why it matters:** _Explain the impact or opportunity._
 
-**Track / Category:** _Online / Offline · Track 1 / Track 2 · <domain>_
+**Why it matters:**
+Impact:CarbonWise can help university campuses reduce electricity costs, minimize solar energy waste, decrease dependence on grid electricity, and lower carbon emissions through intelligent battery scheduling.
+
+Opportunity: The solution can be extended to colleges, industries, EV charging stations, and smart cities, demonstrating the potential of quantum-assisted optimization for sustainable energy management.
+
+
+**Track / Category:** _Online / Offline · Track 6 < Quantum Applications for Climate Change & Sustainability >
 
 ---
 
 ## 💡 Proposed Solution
+CarbonWise is a quantum-assisted energy management platform that optimizes battery charging and discharging schedules for campus microgrids using solar generation, electricity demand, and grid prices. 
+Users enter or upload energy data, and the system applies the **Quantum Approximate Optimization Algorithm (QAOA) using Qiskit**, with a classical optimizer as a baseline, to identify cost-effective energy schedules.
+An interactive dashboard and animated video visualize the recommended schedule, grid usage, estimated electricity costs, and carbon emissions, helping campuses make more sustainable energy decisions.
 
-<!--
-Describe your solution. Keep it concrete: the core idea, the user flow, and
-the quantum/ML technique you are applying.
--->
 
-**Solution:** _In 2–3 sentences, describe what you built._
+**Solution:** 
+CarbonWise is a quantum-assisted energy management prototype that optimizes solar energy utilization and battery charging schedules for campus microgrids using QAOA with Qiskit. 
+It compares quantum-assisted and classical optimization approaches and visualizes energy generation, battery status, grid consumption, and estimated cost and carbon emissions through an interactive dashboard and animated demonstration video.
 
-**Key idea:** _The one-line technical summary of your approach._
 
-**Why this works:** _How your approach addresses the problem statement._
+**Key idea:** 
+Formulates campus solar–battery scheduling as a combinatorial optimization problem, applies QAOA using Qiskit, and benchmarks its results against a classical optimizer to evaluate energy cost, grid dependence, and estimated carbon emissions.
+
+**Why this works:** 
+CarbonWise analyzes hourly solar generation, campus electricity demand, battery constraints, and grid prices to identify cost-effective charging and discharging schedules. 
+QAOA explores candidate schedules, while a classical optimizer provides a benchmark; comparing electricity costs, solar utilization, grid consumption, and estimated CO₂ emissions helps quantify whether the proposed schedule improves campus energy efficiency.
+
 
 ---
 
 ## 🧩 Approach & Architecture
 
-<!--
-Walk through how it works. A simple pipeline diagram in text or Mermaid is ideal.
--->
-
 ```mermaid
-flowchart LR
-    A[Input Data] --> B[Preprocessing]
-    B --> C[Quantum Circuit / Model]
-    C --> D[Post-processing]
-    D --> E[Output]
+flowchart TD
+    A["Campus Energy Data<br/>CSV: Solar, Demand, Grid Prices, Battery Specs"]
+    B["Preprocessing<br/>Clean data, normalize values, define constraints"]
+    C["Optimization Model<br/>Encode battery charging decisions as binary variables"]
+    D["QAOA with Qiskit<br/>Parameterized quantum circuit and measurements"]
+    E["Classical Optimizer<br/>Baseline schedule comparison"]
+    F["Post-processing<br/>Decode schedules, calculate costs and emissions"]
+    G["Interactive Dashboard<br/>Charts, battery schedule, performance metrics"]
+    H["Animated MP4 Demo<br/>Visualize energy flow and results"]
+
+    A --> B
+    B --> C
+    C --> D
+    C --> E
+    D --> F
+    E --> F
+    F --> G
+    F --> H
 ```
 
-1. **Input** — _what data goes in and in what format_
-2. **Preprocessing** — _cleaning, feature extraction, encoding_
-3. **Quantum core** — _the circuit, ansatz, or algorithm used_
-4. **Post-processing** — _decoding, measurement, scoring_
-5. **Output** — _what the user finally gets_
+**1. Input:** Hourly solar generation (kW), campus electricity demand (kW), grid electricity prices (₹/kWh), and battery capacity and charging limits, supplied as CSV data.
+
+**2. Preprocessing:** Validate missing values, align hourly measurements, and define battery capacity, state-of-charge limits, charging/discharging limits, and energy-balance constraints.
+
+**3. Quantum Core:** Formulate battery scheduling as a binary optimization problem and use Qiskit's Quantum Approximate Optimization Algorithm (QAOA) with a parameterized quantum circuit to search for candidate schedules.
+
+**4. Post-processing:** Decode measurement outcomes into candidate schedules, check feasibility, and calculate electricity costs, grid consumption, solar utilization, and estimated CO₂ emissions. Compare the results against a classical optimization baseline.
+
+**5. Output:** A web dashboard displaying the recommended battery schedule, comparative performance metrics, animated energy-flow charts, and a downloadable MP4 demonstration video.
 
 ---
 
