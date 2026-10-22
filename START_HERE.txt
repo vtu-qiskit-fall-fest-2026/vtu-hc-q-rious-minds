@@ -1,0 +1,29 @@
+CARBONWISE — CINEMATIC CAMPUS ENERGY VIDEO + QAOA DEMO
+
+This project creates a cinematic 37-second MP4 with AI-generated drone-style campus visuals, animated solar-to-campus energy flow, surplus energy entering a battery, simulated battery state of charge, evening discharge, a baseline-vs-candidate grid-import chart, and the small Qiskit QAOA optimization result when the optimizer runs successfully.
+
+RUN IT
+1. Extract the ZIP to a new folder.
+2. In VS Code choose File > Open Folder and select this extracted project folder.
+3. Open Terminal > New Terminal.
+4. Install requirements: python -m pip install -r requirements.txt
+5. Start Flask: python app.py
+6. Open http://127.0.0.1:5000 in Chrome.
+7. Click “Generate Cinematic Demo Video”. Wait for the MP4 to finish, then press Play in the webpage video player. Use Download MP4 to save it.
+
+WHAT THE VIDEO SHOWS
+1. Aerial/drone-style campus concept scene and the energy-management problem.
+2. Solar PV generating electricity during daylight.
+3. Surplus solar directed into storage after immediate campus needs.
+4. Battery state of charge shown from the illustrative input data.
+5. Stored energy supporting campus demand when solar output falls.
+6. Baseline vs candidate grid-import comparison.
+7. QAOA candidate schedule vs exact classical benchmark (if QAOA runs successfully).
+8. Closing summary of what CarbonWise measures: cost, grid imports, solar use and estimated CO2.
+
+IMPORTANT LIMITATIONS
+- Campus visuals are AI-generated concept visuals, not verified drone footage of VTU infrastructure.
+- Energy data are simulated, not live VTU meter readings.
+- The optimizer is a small four-decision QAOA research demo using a local statevector simulator, not quantum hardware or a full-campus controller.
+- A matched result on this tiny instance is not evidence of quantum advantage.
+- Cost/emissions comparisons depend on the input data and the stated assumptions; do not claim a specific percentage reduction unless your computed results support it.

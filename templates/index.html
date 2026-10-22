@@ -202,6 +202,54 @@ button:focus-visible {
     font-size: 12px;
 }
 
+
+
+/* Self-contained animated campus + solar + storage explainer (no external image needed). */
+.campus-photo-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 0;
+    overflow: hidden;
+    padding: 0;
+    margin: 0 0 24px;
+}
+.campus-photo-frame {
+    position: relative;
+    min-height: 300px;
+    background: linear-gradient(180deg, #122b46, #09192b);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.energy-scene { display: block; width: 100%; height: auto; min-height: 280px; }
+.animation-badge {
+    position: absolute; z-index: 2; left: 14px; top: 14px;
+    padding: 7px 10px; border-radius: 20px;
+    background: rgba(5, 19, 31, .82); border: 1px solid #2d705d;
+    color: #6ff5bd; font-size: 10px; letter-spacing: 1.2px; font-weight: 800;
+}
+.sun-rays { transform-box: fill-box; transform-origin: center; animation: sunSpin 24s linear infinite; }
+.solar-flow { stroke-dasharray: 12 10; animation: flowDash 1.1s linear infinite; }
+.battery-flow { stroke-dasharray: 10 11; animation: batteryPulse 8s ease-in-out infinite, flowDash 1.1s linear infinite; }
+.energy-dot { filter: drop-shadow(0 0 5px currentColor); }
+.phase-day { animation: dayLabel 8s ease-in-out infinite; }
+.phase-evening { animation: eveningLabel 8s ease-in-out infinite; }
+@keyframes sunSpin { to { transform: rotate(360deg); } }
+@keyframes flowDash { to { stroke-dashoffset: -44; } }
+@keyframes batteryPulse { 0%, 43%, 100% { opacity: .18; } 50%, 91% { opacity: 1; } }
+@keyframes dayLabel { 0%, 47% { opacity: 1; } 52%, 95% { opacity: .08; } 100% { opacity: 1; } }
+@keyframes eveningLabel { 0%, 47% { opacity: .08; } 52%, 95% { opacity: 1; } 100% { opacity: .08; } }
+.campus-photo-info { padding: 26px; align-self: center; }
+.campus-photo-info h2 { margin: 10px 0; }
+.campus-photo-info p { color: #c1d5e6; line-height: 1.65; }
+.flow-steps { display: grid; gap: 9px; margin-top: 18px; }
+.flow-step { display: flex; align-items: flex-start; gap: 10px; color: #d7e8f5; font-size: 13px; line-height: 1.5; }
+.flow-number { flex: 0 0 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: #163c39; border: 1px solid #317b63; color: #6ff5bd; font-weight: 800; }
+@media (max-width: 800px) {
+    .campus-photo-panel { grid-template-columns: 1fr; }
+    .campus-photo-frame { min-height: 220px; }
+}
+
 @media (max-width: 900px) {
     .metrics {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -240,13 +288,15 @@ button:focus-visible {
 
         <p>
             Explore how solar generation, battery storage and grid electricity
-            can work together. CarbonWise will use QAOA-based optimization
-            experiments to investigate better energy scheduling.
+            can work together. Run a real Qiskit QAOA circuit in a local statevector
+            simulation, then compare its candidate schedule with an exact classical baseline.
         </p>
 
         <div class="action-row">
-            <button id="loadButton">↻ Refresh Energy Data</button>
-            <button class="secondary" id="quantumButton">
+            <button id="dashboardModeButton" type="button">📊 Normal Dashboard</button>
+            <button class="secondary" id="generateVideoBtn" type="button">🎬 Generate Cinematic Demo Video</button>
+            <button class="secondary" id="loadButton" type="button">↻ Refresh Energy Data</button>
+            <button class="secondary" id="quantumButton" type="button">
                 ⚛ Quantum Optimization
             </button>
         </div>
@@ -256,7 +306,94 @@ button:focus-visible {
         </div>
     </section>
 
-    <h2 class="section-title">Campus Energy Overview</h2>
+    <section class="card campus-photo-panel" aria-label="Animated CarbonWise campus energy explainer">
+        <div class="campus-photo-frame">
+            <div class="animation-badge">ANIMATED ENERGY CONCEPT</div>
+            <svg class="energy-scene" viewBox="0 0 700 400" role="img" aria-labelledby="energySceneTitle energySceneDesc">
+                <title id="energySceneTitle">CarbonWise solar campus and battery storage animation</title>
+                <desc id="energySceneDesc">Solar panels on a campus building power the campus first. When solar generation is greater than demand, surplus energy flows into a CarbonWise battery. Later, when solar output falls, stored energy can support campus demand.</desc>
+                <defs>
+                    <linearGradient id="cwSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#173e65"/><stop offset="100%" stop-color="#0c1b2d"/></linearGradient>
+                    <linearGradient id="cwBuilding" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e4edf5"/><stop offset="100%" stop-color="#9aafc2"/></linearGradient>
+                    <linearGradient id="cwBattery" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3cf2b0"/><stop offset="100%" stop-color="#168b79"/></linearGradient>
+                    <marker id="cwArrowSolar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#facc15"/></marker>
+                    <marker id="cwArrowBattery" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4ade80"/></marker>
+                </defs>
+                <rect width="700" height="400" fill="url(#cwSky)"/>
+                <circle cx="84" cy="70" r="35" fill="#facc15" opacity=".12"/>
+                <circle cx="84" cy="70" r="23" fill="#facc15"/>
+                <g class="sun-rays" stroke="#facc15" stroke-width="4" stroke-linecap="round">
+                    <path d="M84 34 V23 M84 106 V117 M48 70 H37 M120 70 H131 M59 45 L51 37 M109 95 L117 103 M109 45 L117 37 M59 95 L51 103"/>
+                </g>
+                <g fill="#c4d9ea" opacity=".45"><ellipse cx="210" cy="63" rx="34" ry="12"/><ellipse cx="230" cy="56" rx="21" ry="17"/><ellipse cx="251" cy="64" rx="28" ry="11"/></g>
+                <rect x="0" y="315" width="700" height="85" fill="#163b39"/>
+                <path d="M0 328 Q180 300 355 326 T700 318 V400 H0 Z" fill="#1c4b43"/>
+                <!-- Campus building -->
+                <rect x="70" y="157" width="300" height="160" rx="4" fill="url(#cwBuilding)" stroke="#f5f9ff" stroke-width="2"/>
+                <path d="M55 158 L86 125 L355 125 L385 158 Z" fill="#6e8298" stroke="#b9c9d8" stroke-width="2"/>
+                <!-- rooftop solar array -->
+                <polygon points="106,130 338,130 358,151 87,151" fill="#123b60" stroke="#50c6f2" stroke-width="2"/>
+                <g stroke="#43b8ee" stroke-width="1.2" opacity=".95">
+                    <path d="M143 130 L132 151 M182 130 L178 151 M221 130 L224 151 M260 130 L270 151 M299 130 L316 151"/>
+                    <path d="M99 140 H347"/>
+                </g>
+                <!-- windows and entrance -->
+                <g fill="#173854" stroke="#90bdd7" stroke-width="2">
+                    <rect x="91" y="181" width="35" height="28" rx="2"/><rect x="145" y="181" width="35" height="28" rx="2"/><rect x="199" y="181" width="35" height="28" rx="2"/><rect x="253" y="181" width="35" height="28" rx="2"/><rect x="307" y="181" width="35" height="28" rx="2"/>
+                    <rect x="91" y="225" width="35" height="28" rx="2"/><rect x="145" y="225" width="35" height="28" rx="2"/><rect x="199" y="225" width="35" height="28" rx="2"/><rect x="253" y="225" width="35" height="28" rx="2"/><rect x="307" y="225" width="35" height="28" rx="2"/>
+                </g>
+                <rect x="186" y="268" width="51" height="49" fill="#56738a" stroke="#eaf5ff" stroke-width="2"/>
+                <text x="220" y="344" fill="#f0f7ff" font-size="15" font-weight="800" text-anchor="middle">CAMPUS</text>
+                <text x="220" y="363" fill="#b7cbde" font-size="11" text-anchor="middle">Solar powers campus first</text>
+                <!-- Battery storage -->
+                <rect x="485" y="154" width="125" height="164" rx="16" fill="#0b1725" stroke="#78eac2" stroke-width="3"/>
+                <rect x="524" y="141" width="48" height="14" rx="4" fill="#78eac2"/>
+                <rect x="500" y="174" width="95" height="119" rx="8" fill="#152e40" stroke="#2a5a5d" stroke-width="1.5"/>
+                <rect class="battery-level" x="509" y="274" width="77" height="10" rx="4" fill="url(#cwBattery)" opacity=".95">
+                    <animate attributeName="height" values="18;90;90;45;18" dur="8s" repeatCount="indefinite"/>
+                    <animate attributeName="y" values="275;203;203;248;275" dur="8s" repeatCount="indefinite"/>
+                </rect>
+                <path d="M555 191 L536 232 H553 L542 262 L571 219 H554 Z" fill="#facc15"/>
+                <text x="548" y="339" fill="#72f3bd" font-size="15" font-weight="800" text-anchor="middle">CARBONWISE</text>
+                <text x="548" y="357" fill="#c8d9e7" font-size="12" text-anchor="middle">BATTERY STORAGE</text>
+                <!-- During solar surplus, direct surplus from panels into storage. -->
+                <path class="solar-flow" d="M355 143 C412 107 446 120 487 179" fill="none" stroke="#facc15" stroke-width="5" stroke-linecap="round" marker-end="url(#cwArrowSolar)"/>
+                <circle class="energy-dot" r="6" fill="#facc15"><animateMotion dur="2.2s" repeatCount="indefinite" path="M355 143 C412 107 446 120 487 179"/></circle>
+                <circle class="energy-dot" r="4" fill="#fff1a6"><animateMotion dur="2.2s" begin="-.8s" repeatCount="indefinite" path="M355 143 C412 107 446 120 487 179"/></circle>
+                <!-- When solar falls, storage supports the building. -->
+                <path class="battery-flow" d="M488 244 C438 282 402 280 370 252" fill="none" stroke="#4ade80" stroke-width="5" stroke-linecap="round" marker-end="url(#cwArrowBattery)"/>
+                <circle class="energy-dot" r="6" fill="#4ade80"><animateMotion dur="2.4s" begin="-1s" repeatCount="indefinite" path="M488 244 C438 282 402 280 370 252"/></circle>
+                <text x="421" y="99" fill="#facc15" font-size="11" font-weight="800" text-anchor="middle">SURPLUS SOLAR → STORE</text>
+                <text x="430" y="306" fill="#4ade80" font-size="10" font-weight="800" text-anchor="middle">STORED ENERGY → CAMPUS</text>
+                <text class="phase-day" x="350" y="385" fill="#facc15" font-size="12" font-weight="800" text-anchor="middle">DAY: surplus solar charges the battery</text>
+                <text class="phase-evening" x="350" y="385" fill="#4ade80" font-size="12" font-weight="800" text-anchor="middle">EVENING: battery supports campus demand</text>
+            </svg>
+        </div>
+        <div class="campus-photo-info">
+            <div class="eyebrow">OUR PROPOSED SOLUTION</div>
+            <h2>From daylight solar to stored energy</h2>
+            <p>Think of this as a cartoon model of a campus microgrid. Solar panels supply campus demand first. When solar generation exceeds immediate use, CarbonWise schedules the surplus to charge a battery instead of wasting it. When solar output falls or demand rises later, stored energy can help serve campus loads and reduce grid imports.</p>
+            <div class="flow-steps">
+                <div class="flow-step"><span class="flow-number">1</span><span><strong>Capture:</strong> rooftop solar generates electricity during daylight.</span></div>
+                <div class="flow-step"><span class="flow-number">2</span><span><strong>Store:</strong> use surplus energy to charge the battery when there is room.</span></div>
+                <div class="flow-step"><span class="flow-number">3</span><span><strong>Use later:</strong> discharge the battery when solar drops or the campus needs more power.</span></div>
+                <div class="flow-step"><span class="flow-number">4</span><span><strong>Optimize:</strong> CarbonWise compares a small QAOA schedule with an exact classical baseline.</span></div>
+            </div>
+            <p class="metric-note" style="margin-bottom:0; margin-top:14px;">The browser illustration explains the energy flow. Use Generate Cinematic Demo Video for the more realistic drone-style MP4. Energy values are simulated, not live VTU meter readings.</p>
+        </div>
+    </section>
+
+    <section class="card" id="videoSection" style="display: none; margin-bottom: 24px;">
+        <h2 style="margin-top: 0;">🎬 CarbonWise Animated Prototype</h2>
+        <p class="metric-note">Generate a cinematic drone-style campus-energy MP4 with animated solar generation, surplus-energy storage, battery state of charge, evening discharge, grid-import comparison, and QAOA results when the optimizer runs successfully.</p>
+        <div class="status" id="videoStatus" role="status" aria-live="polite">Video has not been generated yet.</div>
+        <video id="carbonwiseVideo" controls playsinline preload="metadata" style="display: none; width: 100%; max-height: 620px; background: #000; border-radius: 12px; margin-top: 12px;"></video>
+        <p style="margin-bottom: 0; margin-top: 16px;">
+            <a id="downloadVideoBtn" href="#" download="CarbonWise_Simulation.mp4" style="display: none; color: #4ade80; font-weight: 700;">⬇ Download MP4</a>
+        </p>
+    </section>
+
+    <h2 class="section-title" id="campusEnergyHeading">Campus Energy Overview</h2>
 
     <section class="metrics">
 
@@ -326,13 +463,14 @@ button:focus-visible {
         <h3>Explore QAOA-based scheduling</h3>
 
         <p class="metric-note">
-            This dashboard is connected to simulated energy data.
-            The QAOA experiment and validated classical comparison will
-            be connected as separate modules.
+            The optimizer runs a small four-decision QAOA experiment: select exactly
+            two evening slots for battery discharge, with each discharge capped by
+            available grid import. Results are compared against an exact classical
+            search over all 16 candidate bitstrings.
         </p>
 
-        <div id="quantumStatus" class="status">
-            QAOA optimizer not connected yet.
+        <div id="quantumStatus" class="status" role="status" aria-live="polite">
+            Click <strong>⚛ Quantum Optimization</strong> above to run the Qiskit QAOA circuit.
         </div>
     </section>
 
@@ -503,13 +641,139 @@ document.getElementById("loadButton").addEventListener(
     loadEnergy
 );
 
-document.getElementById("quantumButton").addEventListener(
-    "click",
-    () => {
-        document.getElementById("quantumStatus").textContent =
-            "QAOA is not connected yet. Connect the tested quantum_optimizer.py module before running optimization.";
+document.getElementById("quantumButton").addEventListener("click", runQuantumOptimization);
+
+function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[character]));
+}
+
+async function runQuantumOptimization() {
+    const button = document.getElementById("quantumButton");
+    const status = document.getElementById("quantumStatus");
+    button.disabled = true;
+    status.innerHTML = "⏳ Running the Qiskit QAOA circuit and comparing the candidate schedule...";
+
+    try {
+        const response = await fetch("/api/optimize", { method: "POST" });
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+            throw new Error(result.error || "The optimizer could not complete.");
+        }
+
+        const q = result.qaoa;
+        const c = result.classical_exact;
+        const base = result.baseline;
+        const scheduleRows = result.schedule.map(row => `
+            <tr>
+                <td style="padding:9px;border-bottom:1px solid #294057">${escapeHtml(row.hour)}</td>
+                <td style="padding:9px;border-bottom:1px solid #294057">₹${Number(row.grid_price_inr_per_kwh).toFixed(2)}</td>
+                <td style="padding:9px;border-bottom:1px solid #294057">${Number(row.grid_before_kwh).toFixed(1)} kWh</td>
+                <td style="padding:9px;border-bottom:1px solid #294057;color:${row.qaoa_selected ? '#4ade80' : '#9aafc5'};font-weight:700">${row.qaoa_selected ? 'DISCHARGE' : 'No discharge'}</td>
+                <td style="padding:9px;border-bottom:1px solid #294057">${Number(row.grid_after_qaoa_kwh).toFixed(1)} kWh</td>
+            </tr>`).join("");
+
+        status.innerHTML = `
+            <div style="margin:12px 0 18px;padding:14px;border:1px solid #32674c;border-radius:12px;background:#0e2b25">
+                <div style="font-size:17px;color:#4ade80;font-weight:800">✅ QAOA optimization completed</div>
+                <div style="margin-top:6px;color:#c1d5e6">${escapeHtml(result.method)} · ${result.n_qubits} qubits · ${result.shots.toLocaleString()} simulated shots</div>
+                <div style="margin-top:5px;color:#c1d5e6">Selected evening slots: <strong style="color:#4ade80">${q.selected_hours.map(escapeHtml).join(", ")}</strong></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:18px">
+                <div style="padding:13px;border-radius:10px;background:#14263a"><div style="color:#9aafc5">Baseline cost (4 slots)</div><strong style="font-size:21px;color:#edf6ff">₹${Number(base.cost_inr).toFixed(2)}</strong></div>
+                <div style="padding:13px;border-radius:10px;background:#14263a"><div style="color:#9aafc5">QAOA candidate cost</div><strong style="font-size:21px;color:#4ade80">₹${Number(q.cost_inr).toFixed(2)}</strong></div>
+                <div style="padding:13px;border-radius:10px;background:#14263a"><div style="color:#9aafc5">Estimated cost reduction</div><strong style="font-size:21px;color:#4ade80">${Number(q.cost_saving_pct).toFixed(1)}%</strong></div>
+                <div style="padding:13px;border-radius:10px;background:#14263a"><div style="color:#9aafc5">Grid use in 4 slots</div><strong style="font-size:21px;color:#22d3ee">${Number(base.grid_kwh).toFixed(1)} → ${Number(q.grid_kwh).toFixed(1)} kWh</strong></div>
+            </div>
+            <h4 style="margin:12px 0;color:#edf6ff">Candidate discharge schedule</h4>
+            <div style="overflow-x:auto">
+                <table style="border-collapse:collapse;width:100%;font-size:13px;text-align:left">
+                    <thead><tr style="color:#9aafc5;background:#14263a">
+                        <th style="padding:9px">Hour</th><th style="padding:9px">Grid price</th><th style="padding:9px">Grid before</th><th style="padding:9px">QAOA decision</th><th style="padding:9px">Grid after</th>
+                    </tr></thead><tbody>${scheduleRows}</tbody>
+                </table>
+            </div>
+            <p style="margin-top:15px;color:#c1d5e6;line-height:1.6">
+                <strong>Classical exact baseline:</strong> selects ${c.selected_hours.map(escapeHtml).join(", ")} and gives a cost of ₹${Number(c.cost_inr).toFixed(2)}.
+                ${result.qaoa_matches_classical_optimum ? 'The sampled QAOA candidate matched the exact optimum for this small instance.' : 'The sampled QAOA candidate did not match the exact classical optimum in this run.'}
+            </p>
+            <p style="margin-top:8px;color:#facc15;font-size:12px;line-height:1.5">${escapeHtml(result.data_note)} This is a four-slot research prototype, not a full campus-wide dispatch controller; no quantum advantage is claimed.</p>
+        `;
+
+        // Overlay the QAOA candidate's grid-import profile on the normal grid chart.
+        if (gridChart && Array.isArray(result.optimized_grid_profile)) {
+            const label = "Grid Import after QAOA candidate";
+            let qaoaDataset = gridChart.data.datasets.find(dataset => dataset.label === label);
+            if (!qaoaDataset) {
+                qaoaDataset = {
+                    label,
+                    data: result.optimized_grid_profile,
+                    borderColor: chartColors.green,
+                    backgroundColor: chartColors.green,
+                    borderDash: [6, 4],
+                    tension: 0.35
+                };
+                gridChart.data.datasets.push(qaoaDataset);
+            } else {
+                qaoaDataset.data = result.optimized_grid_profile;
+            }
+            gridChart.update();
+        }
+    } catch (error) {
+        status.innerHTML = `<span style="color:#fb7185;font-weight:700">❌ QAOA optimization failed:</span> ${escapeHtml(error.message)}<br><span style="color:#9aafc5">Check the VS Code terminal. If Qiskit is missing, run <code>python -m pip install -r requirements.txt</code> in the active environment.</span>`;
+        console.error("CarbonWise QAOA error:", error);
+    } finally {
+        button.disabled = false;
     }
-);
+}
+
+// Normal dashboard mode: hide the video panel and return to energy charts.
+document.getElementById("dashboardModeButton").addEventListener("click", () => {
+    document.getElementById("videoSection").style.display = "none";
+    document.getElementById("campusEnergyHeading").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+});
+
+// Generate the MP4 through the Flask endpoint in app.py.
+document.getElementById("generateVideoBtn").addEventListener("click", async function () {
+    const button = this;
+    const videoSection = document.getElementById("videoSection");
+    const status = document.getElementById("videoStatus");
+    const video = document.getElementById("carbonwiseVideo");
+    const downloadLink = document.getElementById("downloadVideoBtn");
+
+    videoSection.style.display = "block";
+    videoSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    button.disabled = true;
+    status.textContent = "Generating the CarbonWise MP4. This may take a little while...";
+    downloadLink.style.display = "none";
+
+    try {
+        const response = await fetch("/generate-video", { method: "POST" });
+        const data = await response.json();
+
+        if (!response.ok || !data.success || !data.video_url) {
+            throw new Error(data.error || "The server could not generate the video.");
+        }
+
+        const videoUrl = data.video_url + (data.video_url.includes("?") ? "&" : "?") + "t=" + Date.now();
+        video.src = videoUrl;
+        video.style.display = "block";
+        video.load();
+        downloadLink.href = data.video_url;
+        downloadLink.style.display = "inline-block";
+        status.textContent = "✅ Video generated. Press Play to watch it, or download the MP4.";
+    } catch (error) {
+        status.textContent = "❌ " + error.message + " Check that the /generate-video route is present in app.py and inspect the VS Code terminal.";
+        console.error("CarbonWise video generation error:", error);
+    } finally {
+        button.disabled = false;
+    }
+});
+
 
 loadEnergy();
 </script>

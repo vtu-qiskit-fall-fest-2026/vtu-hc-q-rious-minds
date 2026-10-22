@@ -1,1 +1,4 @@
-'n.venv/
+.venv/
+__pycache__/
+*.py[cod]
+static/generated/*.mp4
