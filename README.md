@@ -335,7 +335,6 @@ Released under the [MIT License](LICENSE). See `LICENSE` for details.
 [⬆ Back to Top](#q-rious-minds)
 
 </div>
-=======
 CARBONWISE — CINEMATIC CAMPUS ENERGY VIDEO + QAOA DEMO
 
 This project creates a cinematic 37-second MP4 with AI-generated drone-style campus visuals, animated solar-to-campus energy flow, surplus energy entering a battery, simulated battery state of charge, evening discharge, a baseline-vs-candidate grid-import chart, and the small Qiskit QAOA optimization result when the optimizer runs successfully.
