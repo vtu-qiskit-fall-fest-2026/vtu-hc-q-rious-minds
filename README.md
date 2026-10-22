@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <div align="center">
 
 # Q-Rious Minds
@@ -365,4 +365,4 @@ IMPORTANT LIMITATIONS
 - The optimizer is a small four-decision QAOA research demo using a local statevector simulator, not quantum hardware or a full-campus controller.
 - A matched result on this tiny instance is not evidence of quantum advantage.
 - Cost/emissions comparisons depend on the input data and the stated assumptions; do not claim a specific percentage reduction unless your computed results support it.
->>>>>>> 3214f9c (Update CarbonWise cinematic demo and QAOA integration)
+
